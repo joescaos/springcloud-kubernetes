@@ -1,13 +1,17 @@
 package org.joescaos.springcloud.msvc.users.msvcusers.controllers;
 
+import jakarta.validation.Valid;
 import org.joescaos.springcloud.msvc.users.msvcusers.models.entities.User;
 import org.joescaos.springcloud.msvc.users.msvcusers.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -30,12 +34,21 @@ public class UsersControllers {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<?> createUser(@Valid @RequestBody User user, BindingResult result) {
+        if (result.hasErrors()) {
+            return responseWithErrors(result);
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(usersService.save(user));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@RequestBody User user, @PathVariable Long id) {
+    public ResponseEntity<?> updateUser(@Valid @RequestBody User user,
+                                        BindingResult result,
+                                        @PathVariable Long id) {
+        if (result.hasErrors()) {
+            return responseWithErrors(result);
+        }
+
         Optional<User> userById = usersService.getUserById(id);
         if (userById.isPresent()) {
             User currentUser = userById.get();
@@ -55,6 +68,18 @@ public class UsersControllers {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    private static ResponseEntity<Map<String, String>> responseWithErrors(BindingResult result) {
+        Map<String, String> errors = new HashMap<>();
+        result.getFieldErrors().forEach(
+                err -> errors.put(err.getField(),
+                        String.format("Field %s %s",
+                                err.getField(),
+                                err.getDefaultMessage()))
+        );
+
+        return ResponseEntity.badRequest().body(errors);
     }
 
 

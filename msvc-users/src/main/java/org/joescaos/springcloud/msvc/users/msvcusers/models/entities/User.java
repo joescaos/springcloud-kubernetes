@@ -1,6 +1,8 @@
 package org.joescaos.springcloud.msvc.users.msvcusers.models.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "users")
@@ -10,11 +12,15 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotEmpty(message = "name cannot be empty")
     private String name;
 
+    @NotEmpty(message = "email cannot be empty")
+    @Email
     @Column(unique = true)
     private String email;
 
+    @NotEmpty
     private String password;
 
     public long getId() {
