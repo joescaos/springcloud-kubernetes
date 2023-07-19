@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: msvc-courses
+
+server:
+  port: 8002
