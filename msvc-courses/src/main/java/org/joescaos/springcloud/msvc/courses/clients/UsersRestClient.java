@@ -2,10 +2,10 @@ package org.joescaos.springcloud.msvc.courses.clients;
 
 import org.joescaos.springcloud.msvc.courses.models.dto.UserDTO;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @FeignClient(name = "msvc-users", url = "localhost:8001")
 public interface UsersRestClient {
@@ -15,4 +15,7 @@ public interface UsersRestClient {
 
     @PostMapping("/api/users")
     UserDTO createUser(@RequestBody UserDTO userDTO);
+
+    @GetMapping("api/users/users-by-course")
+    List<UserDTO> getUsersByCourse(@RequestParam("ids") List<Long> ids);
 }

@@ -21,4 +21,6 @@ public interface CourseService {
     Optional<UserDTO> createUser(UserDTO userDTO, Long courseId);
 
     Optional<UserDTO> deleteUserFromCourse(UserDTO userDTO, Long courseId);
+
+    Optional<Course> getCourseWithUsers(Long id);
 }
