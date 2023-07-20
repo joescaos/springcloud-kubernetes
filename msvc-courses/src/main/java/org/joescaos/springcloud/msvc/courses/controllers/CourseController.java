@@ -1,7 +1,9 @@
 package org.joescaos.springcloud.msvc.courses.controllers;
 
+import feign.FeignException;
 import jakarta.validation.Valid;
 import org.joescaos.springcloud.msvc.courses.models.Course;
+import org.joescaos.springcloud.msvc.courses.models.dto.UserDTO;
 import org.joescaos.springcloud.msvc.courses.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,10 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/courses")
@@ -70,6 +69,51 @@ public class CourseController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.badRequest().build();
+    }
+
+    @PutMapping("/assign-user/{courseId}")
+    public ResponseEntity<?> assignUser(@RequestBody UserDTO user, @PathVariable Long courseId) {
+        Optional<UserDTO> userDTO;
+        try {
+            userDTO = courseService.assignUser(user, courseId);
+        } catch (FeignException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    Collections.singletonMap("message", e.getMessage()));
+        }
+        if (userDTO.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(userDTO.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/create-user/{courseId}")
+    public ResponseEntity<?> createUser(@RequestBody UserDTO user, @PathVariable Long courseId) {
+        Optional<UserDTO> userDTO;
+        try {
+            userDTO = courseService.createUser(user, courseId);
+        } catch (FeignException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    Collections.singletonMap("message", e.getMessage()));
+        }
+        if (userDTO.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(userDTO.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/delete-user/{courseId}")
+    public ResponseEntity<?> deleteUser(@RequestBody UserDTO user, @PathVariable Long courseId) {
+        Optional<UserDTO> userDTO;
+        try {
+            userDTO = courseService.deleteUserFromCourse(user, courseId);
+        } catch (FeignException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    Collections.singletonMap("message", e.getMessage()));
+        }
+        if (userDTO.isPresent()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 
     private static ResponseEntity<Map<String, String>> responseWithErrors(BindingResult result) {

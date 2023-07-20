@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "msvc-users", url = "localhost:8001")
 public interface UsersRestClient {
 
-    @GetMapping("/{id}")
+    @GetMapping("/api/users/{id}")
     UserDTO getUser(@PathVariable Long id);
 
-    @PostMapping
+    @PostMapping("/api/users")
     UserDTO createUser(@RequestBody UserDTO userDTO);
 }
