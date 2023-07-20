@@ -1,5 +1,6 @@
 package org.joescaos.springcloud.msvc.users.msvcusers.services.impl;
 
+import org.joescaos.springcloud.msvc.users.msvcusers.client.CourseRestClient;
 import org.joescaos.springcloud.msvc.users.msvcusers.models.entities.User;
 import org.joescaos.springcloud.msvc.users.msvcusers.repositories.UserRepository;
 import org.joescaos.springcloud.msvc.users.msvcusers.services.UsersService;
@@ -15,6 +16,9 @@ public class UsersServiceImpl implements UsersService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CourseRestClient courseRestClient;
 
     @Override
     @Transactional(readOnly = true)
@@ -38,6 +42,7 @@ public class UsersServiceImpl implements UsersService {
     @Transactional
     public void delete(Long id) {
         userRepository.deleteById(id);
+        courseRestClient.deleteUser(id);
     }
 
     @Override

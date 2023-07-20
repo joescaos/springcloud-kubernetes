@@ -2,7 +2,9 @@ package org.joescaos.springcloud.msvc.users.msvcusers;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
+@EnableFeignClients
 @SpringBootApplication
 public class MsvcUsersApplication {
 

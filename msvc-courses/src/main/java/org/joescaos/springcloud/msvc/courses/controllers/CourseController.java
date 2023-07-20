@@ -116,6 +116,12 @@ public class CourseController {
         return ResponseEntity.notFound().build();
     }
 
+    @DeleteMapping("/delete-user-from-course/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        courseService.deleteCourseUserById(id);
+        return ResponseEntity.noContent().build();
+    }
+
     private static ResponseEntity<Map<String, String>> responseWithErrors(BindingResult result) {
         Map<String, String> errors = new HashMap<>();
         result.getFieldErrors().forEach(
