@@ -18,4 +18,6 @@ public interface UsersService {
     Optional<User> FindByEmail(String email);
 
     boolean userExistsByEmail(String email);
+
+    List<User> getUsersByIds(Iterable<Long> ids);
 }
