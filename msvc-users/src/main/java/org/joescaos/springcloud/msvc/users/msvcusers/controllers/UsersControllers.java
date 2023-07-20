@@ -9,10 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/users")
@@ -38,6 +35,8 @@ public class UsersControllers {
         if (result.hasErrors()) {
             return responseWithErrors(result);
         }
+        if (!user.getEmail().isEmpty() && usersService.userExistsByEmail(user.getEmail()))
+            return ResponseEntity.badRequest().body(Collections.singletonMap("Email", "email already exists"));
         return ResponseEntity.status(HttpStatus.CREATED).body(usersService.save(user));
     }
 
@@ -52,6 +51,10 @@ public class UsersControllers {
         Optional<User> userById = usersService.getUserById(id);
         if (userById.isPresent()) {
             User currentUser = userById.get();
+            if (!user.getEmail().isEmpty()
+                    && !user.getEmail().equalsIgnoreCase(currentUser.getEmail())
+                    && usersService.userExistsByEmail(user.getEmail()))
+                return ResponseEntity.badRequest().body(Collections.singletonMap("Email", "email already exists"));
             currentUser.setName(user.getName());
             currentUser.setEmail(user.getEmail());
             currentUser.setPassword(user.getPassword());
