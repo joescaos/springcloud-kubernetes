@@ -1,9 +1,12 @@
 FROM openjdk:17-alpine
 
-WORKDIR /app
+WORKDIR /app/msvc-users
 
-COPY ./target/msvc-users-0.0.1-SNAPSHOT.jar .
+COPY ./pom.xml /app
+COPY ./msvc-users .
+
+RUN ./mvnw clean package -DSkipTests
 
 EXPOSE 8001
 
-ENTRYPOINT ["java", "-jar", "msvc-users-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "./target/msvc-users-0.0.1-SNAPSHOT.jar"]
