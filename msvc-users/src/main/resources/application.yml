@@ -2,7 +2,8 @@ spring:
   application:
     name: msvc-users #service identifier
   datasource:
-    url: jdbc:mysql://host.docker.internal:3306/msvc_users
+    # url: jdbc:mysql://host.docker.internal:3306/msvc_users
+    url: jdbc:mysql://mysql8:3306/msvc_users
     username: root
     password: admin
     driver-class-name: com.mysql.cj.jdbc.Driver
