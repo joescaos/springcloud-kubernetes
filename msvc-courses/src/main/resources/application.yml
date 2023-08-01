@@ -2,7 +2,8 @@ spring:
   application:
     name: msvc-courses
   datasource:
-    url: jdbc:postgresql://localhost:5432/msvc_courses
+    # url: jdbc:postgresql://host.docker.internal:5432/msvc_courses
+    url: jdbc:postgresql://postgres:5432/msvc_courses
     username: postgres
     password: admin
     driver-class-name: org.postgresql.Driver
