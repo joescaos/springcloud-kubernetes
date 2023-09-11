@@ -25,7 +25,10 @@ services:
 
   msvc-users:
     container_name: msvc-users
-    image: users:latest
+    #image: users:latest
+    build:
+      context: ./
+      dockerfile: ./msvc-users/Dockerfile
     ports:
       - "8001:8001"
     depends_on:
@@ -34,11 +37,15 @@ services:
 
   msvc-courses:
     container_name: msvc-courses
-    image: courses:latest
+    #image: courses:latest
+    build:
+      context: ./
+      dockerfile: ./msvc-courses/Dockerfile
     ports:
       - "8002:8002"
     depends_on:
       - "postgres14"
+      - "msvc-users"
     restart: always
 
 volumes:
